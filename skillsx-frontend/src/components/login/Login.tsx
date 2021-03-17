@@ -13,6 +13,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { loginUser } from "../../queries/mutations";
+import { useMutation } from "@apollo/client";
+
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -49,11 +54,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
+  const history = useHistory();
 
   // state Variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [loginSubmitted, { data, loading, error }] = useMutation(loginUser);
 
   //alert style
   const alert = { color: "red", marginTop: "0px" };
@@ -62,7 +70,19 @@ export default function Login() {
   const loginHandler = (e: any) => {
     e.preventDefault();
     setIsSubmitted(true);
+
+    loginSubmitted({
+      variables: { email: email, password: password },
+    });
   };
+
+  if (data) {
+    history.push("/Navigation");
+  }
+
+  if (loading) return <p>loading...</p>;
+
+  if (error) return <p>Error... </p>;
 
   return (
     <div>

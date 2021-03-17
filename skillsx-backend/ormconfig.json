@@ -1,0 +1,9 @@
+{
+    "type": "mongodb",
+    "url": "mongodb+srv://ahsan:ahsan123@skills-x.uxgux.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "useNewUrlParser": true,
+    "useUnifiedTopology": true,
+    "synchronize": true,
+    "logging": true,
+    "entities": ["./src/entities/*.ts"]
+   }
