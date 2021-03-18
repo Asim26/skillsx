@@ -18,6 +18,8 @@ import { useMutation } from "@apollo/client";
 
 import { useHistory } from "react-router-dom";
 
+import { loginAccess } from "../../cache";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -71,13 +73,16 @@ export default function Login() {
     e.preventDefault();
     setIsSubmitted(true);
 
-    loginSubmitted({
-      variables: { email: email, password: password },
-    });
+    if (email && password) {
+      loginSubmitted({
+        variables: { email: email, password: password },
+      });
+    }
   };
 
   if (data) {
-    history.push("/Navigation");
+    loginAccess(true);
+    history.push("/Navigation", loginAccess());
   }
 
   if (loading) return <p>loading...</p>;

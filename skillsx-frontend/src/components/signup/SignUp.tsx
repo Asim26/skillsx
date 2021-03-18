@@ -56,7 +56,7 @@ export default function SignUp() {
   const classes = useStyles();
   const history = useHistory();
 
-  // state Variables
+    // state Variables
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -69,7 +69,7 @@ export default function SignUp() {
   //alert style
   const alert = { color: "red", lineHeight: "0px" };
 
-  //functions
+  //  functions
   const signUpHandler = (e: any) => {
     e.preventDefault();
     setIsSubmitted(true);

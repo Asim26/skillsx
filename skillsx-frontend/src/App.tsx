@@ -1,12 +1,9 @@
 import React from 'react';
-import AppRouter from './Router';
+import Router from './Router';
 
 function App() {
     return (
-    <div>
-      {/* <h1>Home</h1> */}
-      <AppRouter />
-    </div>
+    <Router/>
   );
 }
 

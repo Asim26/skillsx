@@ -17,7 +17,8 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 
 import SchoolIcon from "@material-ui/icons/School";
 import "./Navigation.css";
-import { Link } from "react-router-dom";
+import { Link , useHistory } from "react-router-dom";
+import { loginAccess } from "../../cache";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -85,11 +86,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navigation() {
   const classes = useStyles();
+  const history = useHistory();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const logOut = () =>{
+    loginAccess(false);
+    history.push("/");
+  }
 
   const handleProfileMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -124,11 +132,7 @@ export default function Navigation() {
           Settings
         </Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
-        <Link to="/" className="dropdownLinks">
-          Log Out{" "}
-        </Link>
-      </MenuItem>
+      <MenuItem onClick={()=>{logOut()}}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -222,7 +226,7 @@ export default function Navigation() {
               </Badge>
             </IconButton> */}
             <IconButton>
-              <Link to="/" className="navLinks">
+              <Link to="/courses" className="navLinks">
                 Courses
               </Link>
             </IconButton>
