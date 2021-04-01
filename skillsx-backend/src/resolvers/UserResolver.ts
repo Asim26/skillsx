@@ -1,16 +1,19 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, UseMiddleware } from "type-graphql";
 import { sign } from 'jsonwebtoken'
 import { compare, hash } from "bcryptjs";
 import { User } from "../entities/User";
 import {
-  SECRET_KEY, INCORRECT_PASSWORD, NOT_FOUND,
+  USER_SECRET_KEY, INCORRECT_PASSWORD, NOT_FOUND,
   IS_EXISTS
 } from '../Utils/Constants';
+import { userAuth } from "../authentication/auth";
+
 
 @Resolver()
 export class UserResolver {
   //all users
   @Query(() => [User])
+  @UseMiddleware(userAuth)
   async allUsers(): Promise<User[]> {
     return await User.find();
   }
@@ -39,12 +42,32 @@ export class UserResolver {
       phoneNo,
       isActive
     });
-    await user.save(); 
+    await user.save();
+    return user
+  }
+
+  //Login User With Email and Password
+  @Mutation(() => User)
+  async loginUser(@Arg("email") email: string,
+    @Arg("password") password: string) {
+    const user = await User.findOne({ where: { email } });
+    if (!user) { throw new Error(NOT_FOUND); }
+
+    const verify = await compare(password, user.password);
+
+    if (!verify) { throw new Error(INCORRECT_PASSWORD); }
+
+    const accessToken = sign({ userId: user._id }, USER_SECRET_KEY, {
+      expiresIn: '1d',
+    })
+    user.accessToken = accessToken
+
     return user
   }
 
   //find user byid
   @Query(() => User!, { nullable: true })
+  @UseMiddleware(userAuth)
   async findUserByID(
     @Arg("_id") _id: string
   ): Promise<User | undefined | null> {
@@ -53,6 +76,7 @@ export class UserResolver {
 
   //delete user byid
   @Mutation(() => User!, { nullable: true })
+  @UseMiddleware(userAuth)
   async deleteUserByID(
     @Arg("_id") _id: string
   ): Promise<User | undefined | null> {
@@ -67,6 +91,7 @@ export class UserResolver {
 
   //update user
   @Mutation(() => User!)
+  @UseMiddleware(userAuth)
   async updateUser(
     @Arg("_id") _id: string,
     @Arg("firstName") firstName: string, // 2
@@ -94,22 +119,4 @@ export class UserResolver {
     return null;
   }
 
-  //Login With Email and Password
-   @Mutation(() => User)
-   async loginUser(@Arg("email") email: string,
-   @Arg("password") password: string) {
-     const user = await User.findOne({ where: { email } });
-     if (!user) { throw new Error(NOT_FOUND); }
- 
-     const verify = await compare(password, user.password);
- 
-     if (!verify) { throw new Error(INCORRECT_PASSWORD); }
- 
-     const accessToken = sign({ userId: user._id }, SECRET_KEY, {
-       expiresIn: '1d',
-     })
-     user.accessToken = accessToken
-
-     return user
-   }
 }

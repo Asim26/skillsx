@@ -4,19 +4,30 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, concat } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
+import { userAccessToken } from './cache';
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+  operation.setContext({
+    headers: {
+      authorization: userAccessToken(),
+    }
+  });
+
+  return forward(operation);
+})
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  cache: new InMemoryCache()
-});
-
+  cache: new InMemoryCache(),
+  link: concat(authMiddleware, new HttpLink({ uri: 'http://localhost:4002/graphql' })),
+})
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+ ,
   document.getElementById('root')
 );
 

@@ -7,7 +7,7 @@ const Protected = (props: any) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (loginAccess() == false) {
+    if (loginAccess()== false) {
       history.push("/");
     }
   }, []);

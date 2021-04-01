@@ -1,0 +1,13 @@
+*{
+    padding: 0%;
+    margin: 0%;
+}
+.heading{
+    font-size: x-large!important;
+}
+.alertStyle{
+    color: red!important;
+    margin-top: 3%!important;
+    text-align: center!important;
+    font-size: x-large;
+}

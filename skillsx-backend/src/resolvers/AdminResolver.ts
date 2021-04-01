@@ -1,18 +1,20 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, UseMiddleware } from "type-graphql";
 import { sign } from "jsonwebtoken";
 import { compare, hash } from "bcryptjs";
 import { Admin } from "../entities/Admin";
 import {
-  SECRET_KEY,
+  ADMIN_SECRET_KEY,
   INCORRECT_PASSWORD,
   NOT_FOUND,
   IS_EXISTS,
 } from "../Utils/Constants";
+import { adminAuth } from "../authentication/auth";
 
 @Resolver()
 export class AdminResolver {
-  //all admins
+  //fetch all admins
   @Query(() => [Admin])
+  @UseMiddleware(adminAuth)
   async allAdmins(): Promise<Admin[]> {
     return await Admin.find();
   }
@@ -49,8 +51,32 @@ export class AdminResolver {
     return admin;
   }
 
-  //find admin byid
+  //Login With Email and Password
+  @Mutation(() => Admin)
+  async login(@Arg("email") email: string, @Arg("password") password: string) {
+    const admin = await Admin.findOne({ where: { email } });
+    if (!admin) {
+      throw new Error(NOT_FOUND);
+    }
+
+    const verify = await compare(password, admin.password);
+
+    if (!verify) {
+      throw new Error(INCORRECT_PASSWORD);
+    }
+
+    const accessToken = sign({ adminId: admin._id }, ADMIN_SECRET_KEY, {
+      expiresIn: "1d",
+    });
+    admin.accessToken = accessToken;
+
+    return admin;
+  }
+
+  // find admin by _id
   @Query(() => Admin!, { nullable: true })
+
+  @UseMiddleware(adminAuth)
   async findAdminByID(
     @Arg("_id") _id: string
   ): Promise<Admin | undefined | null> {
@@ -59,6 +85,8 @@ export class AdminResolver {
 
   //delete admin byid
   @Mutation(() => Admin!, { nullable: true })
+
+  @UseMiddleware(adminAuth)
   async deleteAdminByID(
     @Arg("_id") _id: string
   ): Promise<Admin | undefined | null> {
@@ -73,6 +101,8 @@ export class AdminResolver {
 
   //update Admin
   @Mutation(() => Admin!)
+
+  @UseMiddleware(adminAuth)
   async updateAdmin(
     @Arg("_id") _id: string,
     @Arg("firstName") firstName: string, // 2
@@ -100,25 +130,4 @@ export class AdminResolver {
     return null;
   }
 
-  //Login With Email and Password
-  @Mutation(() => Admin)
-  async login(@Arg("email") email: string, @Arg("password") password: string) {
-    const admin = await Admin.findOne({ where: { email } });
-    if (!admin) {
-      throw new Error(NOT_FOUND);
-    }
-
-    const verify = await compare(password, admin.password);
-
-    if (!verify) {
-      throw new Error(INCORRECT_PASSWORD);
-    }
-
-    const accessToken = sign({ adminId: admin._id }, SECRET_KEY, {
-      expiresIn: "1d",
-    });
-    admin.accessToken = accessToken;
-
-    return admin;
-  }
 }

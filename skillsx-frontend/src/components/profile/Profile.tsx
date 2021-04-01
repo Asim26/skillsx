@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,25 +13,19 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { registerUser } from "../../queries/mutations";
-import { useMutation } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
-import "./SignUp.css";
+import { userId } from "../../cache";
+
+import "./Profile.css";
+import Navigation from "../navigation/Navigation";
+
+import { useQuery, useMutation } from "@apollo/client";
+import { findUserByID, updateUser, allUsers } from "../../queries/mutations";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
-  },
-  image: {
-    backgroundImage:
-      "url(https://www.trainingzone.co.uk/sites/default/files/styles/inline_banner/public/istock-889968488.jpg?itok=Otuy0qok)",
-    backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -50,69 +44,99 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  cancel: {
+    margin: theme.spacing(3, 0, 2),
+    backgroundColor: "red",
+    color: "white",
+  },
 }));
 
-export default function SignUp() {
+export default function Profile() {
   const classes = useStyles();
+  const history = useHistory();
 
-  // state Variables
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [onError, setOnError] = useState(false);
+  //fetching records based on current logged in user id 
+  const id = userId();
 
-  //Executing SignUp Mutation
-  const [signUpUser, { data, loading, error }] = useMutation(registerUser,{
+  //Query & Mutation Error Handling States
+  const [onQueryError, setOnQueryError] = useState(false);
+  const [onMutationError, setOnMutationError] = useState(false);
+
+  //fetch the logged in user using id
+  const { loading, error, data } = useQuery(findUserByID,{
+    variables: { _id: id  },
+    fetchPolicy: "cache-and-network", 
     onError: (e) => {
-      setOnError(true);
-    } 
+      setOnQueryError(true);
+    }
   });
 
-  //alert style
-  const alert = { color: "red", lineHeight: "0px" };
+  // state Variables
+  const [firstName, setFirstName] = useState(data && data.findUserByID.firstName);
+  const [lastName, setLastName] = useState(data && data.findUserByID.lastName);
+  const [email, setEmail] = useState(data && data.findUserByID.email);
+  const [phoneNumber, setPhoneNumber] = useState(data && data.findUserByID.phoneNo);
+  const [password, setPassword] = useState("1234");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  //call mutation for updating the data
+  const [updateProfile] = useMutation(updateUser,{
+    onError: (e) => {
+    setOnMutationError(true);
+   }
+  });
 
   //  functions
-  const signUpHandler = (e: any) => {
+  const updateUserDetailsHandler = (e: any) => {
     e.preventDefault();
     setIsSubmitted(true);
-
-    signUpUser({
+    
+    //updating the data
+    updateProfile({
       variables: {
+        _id: id, 
         firstName: firstName,
         lastName: lastName,
         email: email,
         password: password,
-        isActive: true,
         phoneNo: phoneNumber,
+        isActive: true,
       },
+      
+      refetchQueries: [{ query: findUserByID, variables:{  _id: id } }]
     });
 
   };
-
+    
   return (
     <div>
-      <Grid container component="main" className={classes.root}>
+      <Navigation />
+      <Grid container className={classes.root}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} className="gridItem">
           <div className={classes.paper}>
             <Avatar className={classes.avatar}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign Up
+              Profile
             </Typography>
             <br />
             {
-              onError?<p className="alertStyle">Error! Could Not Sign Up</p> :""
+              onQueryError?<p className="alertStyle">unable to fetch data</p> :""
             }
-            <br/>
-            <form onSubmit={signUpHandler} className={classes.form} noValidate>
+            {
+              onMutationError?<p className="alertStyle">unable to update the data</p> :""
+            }
+            
+            <form
+              onSubmit={updateUserDetailsHandler}
+              className={classes.form}
+              noValidate
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
+                  <label>First Name</label>
                   <TextField
                     autoComplete="fname"
                     name="firstName"
@@ -120,26 +144,28 @@ export default function SignUp() {
                     required
                     fullWidth
                     id="firstName"
-                    label="First Name"
+                    defaultValue={firstName}
+
                     autoFocus
                     onChange={(e: any) => {
                       setFirstName(e.target.value);
                     }}
                   />
                   {!firstName && isSubmitted ? (
-                    <p style={alert}>First Name is required </p>
+                    <p className="alertStyle">First Name is required </p>
                   ) : (
                     ""
                   )}
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
+                  <label>Last Name</label>
                   <TextField
                     variant="outlined"
                     required
                     fullWidth
                     id="lastName"
-                    label="Last Name"
+                    defaultValue={lastName}
                     name="lastName"
                     autoComplete="lname"
                     onChange={(e: any) => {
@@ -147,19 +173,20 @@ export default function SignUp() {
                     }}
                   />
                   {!lastName && isSubmitted ? (
-                    <p style={alert}>Last Name is required </p>
+                    <p className="alertStyle">Last Name is required </p>
                   ) : (
                     ""
                   )}
                 </Grid>
 
                 <Grid item xs={12}>
+                  <label>Email</label>
                   <TextField
                     variant="outlined"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
+                    id="email"                    
+                    defaultValue={email}
                     name="email"
                     autoComplete="email"
                     onChange={(e: any) => {
@@ -167,20 +194,21 @@ export default function SignUp() {
                     }}
                   />
                   {!email && isSubmitted ? (
-                    <p style={alert}>Email is required </p>
+                    <p className="alertStyle">Email is required </p>
                   ) : (
                     ""
                   )}
                 </Grid>
 
                 <Grid item xs={12}>
+                  <label> Phone No</label>
                   <TextField
                     variant="outlined"
                     required
                     fullWidth
                     name="Phone_number"
-                    label="Phone Number"
                     type="text"
+                    defaultValue={phoneNumber}
                     id="Phone_number"
                     autoComplete="off"
                     onChange={(e: any) => {
@@ -188,57 +216,34 @@ export default function SignUp() {
                     }}
                   />
                   {!phoneNumber && isSubmitted ? (
-                    <p style={alert}>Phone Number is required </p>
+                    <p className="alertStyle">Phone Number is required </p>
                   ) : (
                     ""
                   )}
                 </Grid>
 
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    required
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={(e: any) => {
-                      setPassword(e.target.value);
-                    }}
-                  />
-                  {!password && isSubmitted ? (
-                    <p style={alert}>Password is required </p>
-                  ) : (
-                    ""
-                  )}
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Save
+                  </Button>
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid>
-              </Grid>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                { loading? "Signing Up":"Sign Up"}
-              </Button>
-
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <Link href="/" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    className={classes.cancel}
+                  >
+                    Reset
+                  </Button>
                 </Grid>
               </Grid>
 

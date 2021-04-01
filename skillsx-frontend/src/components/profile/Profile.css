@@ -1,0 +1,9 @@
+.gridItem{
+    margin-left: auto!important;
+    margin-right: auto!important;
+    margin-top: -3%!important;
+}
+.alertStyle{
+    color: red;
+    line-height: 0%;
+}

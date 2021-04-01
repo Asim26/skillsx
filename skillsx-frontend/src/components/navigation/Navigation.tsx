@@ -225,13 +225,18 @@ export default function Navigation() {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
+             <IconButton>
+              <Link to="/Categories" className="navLinks">
+                Categories
+              </Link>
+            </IconButton>
             <IconButton>
-              <Link to="/courses" className="navLinks">
+              <Link to="/Courses" className="navLinks">
                 Courses
               </Link>
             </IconButton>
             <IconButton>
-              <Link to="/" className="navLinks">
+              <Link to="/Profile" className="navLinks">
                 Profile
               </Link>
             </IconButton>

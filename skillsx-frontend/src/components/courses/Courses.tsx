@@ -11,7 +11,9 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import Navigation from "../navigation/Navigation";
+import { courseId } from "../../cache";
 import "./Courses.css";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -22,15 +24,72 @@ const useStyles = makeStyles({
 
 export default function Courses() {
   const classes = useStyles();
-  return (
+  const history = useHistory();
+
+ const courses= [
+    {
+      "courseName": "react",
+      "id":1,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id":2,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id":3,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id":4,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id":5,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id":6,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+    {
+      "courseName": "react",
+      "id": 7,
+      "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    },
+   
+  ];
+
+  const showCardDetail = (id:any) =>{
+   courseId(id);
+   history.push("/Course", courseId);
+  }
+
+  return (   
+    
     <div className="main-div">
       <Navigation />
       <h2 className="courses">Courses</h2>
 
       <div className="cards-container">
       <Grid container spacing={2} >
-
-        <Grid item md={3}>
+      {courses.map((course) => (
+        <Grid item md={3} onClick={()=>{
+          showCardDetail(course.id)
+        }}>
+          
           <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
@@ -42,11 +101,10 @@ export default function Courses() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                    Course Name
+                 {course.courseName}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
+                  {course.courseDescription}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -59,103 +117,10 @@ export default function Courses() {
               </Button>
             </CardActions>
           </Card>
-        </Grid>
-        {/* 2nd card */}
 
-        <Grid item md={3}>
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                height="140"
-                image="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg"
-                title="Contemplative Reptile"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  Course Name
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-              <Button size="small" color="primary">
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        {/* 3rd card */}
-        <Grid item md={3}>
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                height="140"
-                image="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg"
-                title="Contemplative Reptile"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                    Course Name
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-              <Button size="small" color="primary">
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
         </Grid>
 
-        {/* 4th card */}
-        <Grid item md={3}>
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                height="140"
-                image="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg"
-                title="Contemplative Reptile"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                    Course Name
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-              <Button size="small" color="primary">
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
+      ))}
       </Grid>
       </div>
 

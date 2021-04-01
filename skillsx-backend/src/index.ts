@@ -5,17 +5,22 @@ import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { UserResolver } from "./resolvers/UserResolver";
 import { AdminResolver } from "./resolvers/AdminResolver";
+import { CategoryResolver } from "./resolvers/CategoryResolver";
 
 const startServer = async () => {
-  await createConnection(); // 1
+  await createConnection();
   const schema = await buildSchema({
-    resolvers: [UserResolver, AdminResolver],
+    resolvers: [UserResolver, AdminResolver, CategoryResolver],
   });
-  const app = Express(); //3
-  const apolloServer = new ApolloServer({ schema }); //4
-  apolloServer.applyMiddleware({ app }); // 5
-  app.listen(4000, () => {
-    console.log("server started");
+  const port = 4002;
+  const app = Express();
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({ req, res })
+  });
+  apolloServer.applyMiddleware({ app });
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
   });
 };
 startServer();

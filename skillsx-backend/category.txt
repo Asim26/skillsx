@@ -1,0 +1,85 @@
+mutation{
+  createCategory(
+    title : "sixth category"
+    description : "This is sixth category"
+    isActive : true
+    isDeleted : false
+  ){
+    title
+    description
+    isActive
+    isDeleted
+    createdAt
+    updatedAt
+  }
+}
+
+query{
+ fetchCategories {
+    _id
+    title
+    description
+    isActive
+    isDeleted 
+    createdAt
+    updatedAt
+  }
+}
+
+query{
+ findCategoryByID(_id:"6058af859327be33ac4b3e9d") {
+    _id
+    title
+    description
+    isActive
+    isDeleted
+    createdAt
+    updatedAt
+  }
+}
+
+query{
+ findCategoryByTitle(title:"second category") {
+    _id
+    title
+    description
+    createdAt
+    updatedAt
+  }
+}
+
+mutation{
+ deleteCategoryByID(_id:"6058d74287a0093a8ccd2a2f") {
+    _id
+    title
+    description
+    isActive
+    isDeleted
+    createdAt
+    updatedAt
+  }
+}
+
+mutation{
+ UpdateCategoryStatusByID(_id:"605af6fc1990f72208f05523",isActive:true) {
+    _id
+    title
+    description
+    isActive
+    isDeleted
+    createdAt
+    updatedAt
+  }
+}
+
+mutation{
+ updateCategory(_id:"605af6fc1990f72208f05523",description:"This is sixth category updated") {
+    _id
+    title
+    description
+    isActive
+    isDeleted
+    createdAt
+    updatedAt
+  }
+}

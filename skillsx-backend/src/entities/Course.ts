@@ -11,41 +11,33 @@ import {
 
 @ObjectType()
 @Entity()
-export class Admin extends BaseEntity {
+export class Course extends BaseEntity {
   @Field(() => ID)
   @ObjectIdColumn()
   _id: ObjectID;
 
   @Field()
-  accessToken: string;
+  imageUrl: string;
 
   @Field()
   @Column()
-  firstName: string;
+  title: string;
 
   @Field()
   @Column()
-  lastName: string;
+  description: string;
 
   @Field()
   @Column()
-  email: string;
-
-  @Field()
-  @Column()
-  password: string;
-
-  @Field()
-  @Column()
-  phoneNo: string;
-
-  @Field()
-  @Column()
-  role: string;
+  outline: string;
 
   @Field()
   @Column()
   isActive: boolean;
+
+  @Field()
+  @Column()
+  isDeleted: boolean;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
@@ -54,4 +46,22 @@ export class Admin extends BaseEntity {
   @Field()
   @UpdateDateColumn({ type: "timestamp", nullable: true })
   updatedAt: Date;
+
+  @Field()
+  @Column()
+  categoryId: string;
+
+  // @Field()
+  // @Column()
+  // courseParts: [
+  //   {
+  //     title: string;
+  //     description: string;
+  //     outline: string;
+  //     isActive: boolean;
+  //     isDeleted: boolean;
+  //     createdAt: Date;
+  //     updatedAt: Date;
+  //   }
+  // ];
 }

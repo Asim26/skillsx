@@ -18,7 +18,10 @@ import { useMutation } from "@apollo/client";
 
 import { useHistory } from "react-router-dom";
 
-import { loginAccess } from "../../cache";
+import { loginAccess, userAccessToken } from "../../cache";
+import { userId } from "../../cache";
+
+import "./Login.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,11 +65,13 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [onError, setOnError] = useState(false);
 
-  const [loginSubmitted, { data, loading, error }] = useMutation(loginUser);
-
-  //alert style
-  const alert = { color: "red", marginTop: "0px" };
+  const [loginSubmitted, { data, loading, error }] = useMutation(loginUser,{
+    onError: (e) => {
+      setOnError(true);
+    } 
+  });
 
   //functions
   const loginHandler = (e: any) => {
@@ -82,12 +87,13 @@ export default function Login() {
 
   if (data) {
     loginAccess(true);
-    history.push("/Navigation", loginAccess());
+    history.push("/Courses", loginAccess());
+    
+    //storing userId & accessToken in reactive variables 
+    userId(data.loginUser._id);
+    userAccessToken("Bearer ".concat(data.loginUser.accessToken));
   }
 
-  if (loading) return <p>loading...</p>;
-
-  if (error) return <p>Error... </p>;
 
   return (
     <div>
@@ -102,6 +108,11 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+
+            {
+              onError?<p className="inValidCredentials alertStyle">Invalid Credentials</p> :""
+            }
+            
             <form onSubmit={loginHandler} className={classes.form} noValidate>
               <TextField
                 variant="outlined"
@@ -118,7 +129,7 @@ export default function Login() {
                 }}
               />
               {!email && isSubmitted ? (
-                <p style={alert}>Email is required </p>
+                <p className="alertStyle">Email is required </p>
               ) : (
                 ""
               )}
@@ -137,7 +148,7 @@ export default function Login() {
                 }}
               />
               {!password && isSubmitted ? (
-                <p style={alert}>Password is required </p>
+                <p className="alertStyle">Password is required </p>
               ) : (
                 ""
               )}
@@ -145,7 +156,8 @@ export default function Login() {
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              />              
+
               <Button
                 type="submit"
                 fullWidth
@@ -154,8 +166,9 @@ export default function Login() {
                 className={classes.submit}
                 onClick={loginHandler}
               >
-                Sign In
+              { loading? "loading":"Sign in"}
               </Button>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
