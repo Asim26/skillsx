@@ -2,12 +2,24 @@
     padding: 0%;
     margin: 0%;
 }
-.heading{
-    font-size: x-large!important;
-}
+
 .alertStyle{
     color: red!important;
     margin-top: 3%!important;
     text-align: center!important;
     font-size: x-large;
+}
+.categories-heading{
+    text-align: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    font-size: xx-large;
+}
+.main-container{
+    margin-left: 2%;
+    margin-right: 2%;
+}
+.tableHeading{
+    font-weight: bold!important;
+    font-size: larger!important;
 }

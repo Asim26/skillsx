@@ -64,6 +64,8 @@ export default function SignUp() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [onError, setOnError] = useState(false);
 
+  const [phoneValidation, setPhoneValidation] = useState(false);
+
   //Executing SignUp Mutation
   const [signUpUser, { data, loading, error }] = useMutation(registerUser,{
     onError: (e) => {
@@ -72,12 +74,23 @@ export default function SignUp() {
   });
 
   //alert style
-  const alert = { color: "red", lineHeight: "0px" };
+  const alertStyle = { color: "red", marginTop: "2%" };
 
   //  functions
   const signUpHandler = (e: any) => {
     e.preventDefault();
     setIsSubmitted(true);
+
+    // var phoneNumber1 = phoneNumber;
+    var phoneRGEX = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/g;
+    var phoneResult = phoneRGEX.test(phoneNumber);
+
+    if(phoneResult){
+      setPhoneValidation(true)
+    }
+    else{
+      setPhoneValidation(false)
+    }
 
     signUpUser({
       variables: {
@@ -107,7 +120,7 @@ export default function SignUp() {
             </Typography>
             <br />
             {
-              onError?<p className="alertStyle">Error! Could Not Sign Up</p> :""
+              onError?<p className="error">Oops! Something Went Wrong...</p> :""
             }
             <br/>
             <form onSubmit={signUpHandler} className={classes.form} noValidate>
@@ -127,7 +140,7 @@ export default function SignUp() {
                     }}
                   />
                   {!firstName && isSubmitted ? (
-                    <p style={alert}>First Name is required </p>
+                    <p style={alertStyle}>First Name is required </p>
                   ) : (
                     ""
                   )}
@@ -147,7 +160,7 @@ export default function SignUp() {
                     }}
                   />
                   {!lastName && isSubmitted ? (
-                    <p style={alert}>Last Name is required </p>
+                    <p style={alertStyle}>Last Name is required </p>
                   ) : (
                     ""
                   )}
@@ -167,7 +180,7 @@ export default function SignUp() {
                     }}
                   />
                   {!email && isSubmitted ? (
-                    <p style={alert}>Email is required </p>
+                    <p style={alertStyle}>Email is required </p>
                   ) : (
                     ""
                   )}
@@ -184,14 +197,17 @@ export default function SignUp() {
                     id="Phone_number"
                     autoComplete="off"
                     onChange={(e: any) => {
-                      setPhoneNumber(e.target.value);
+                      setPhoneNumber(e.target.value)
                     }}
                   />
                   {!phoneNumber && isSubmitted ? (
-                    <p style={alert}>Phone Number is required </p>
+                    <p style={alertStyle}>Phone Number is required </p>
                   ) : (
                     ""
                   )}
+                  {
+                    phoneValidation?"":<p style={{color:"red"}}>Invalid Number</p>
+                  }
                 </Grid>
 
                 <Grid item xs={12}>
@@ -209,7 +225,7 @@ export default function SignUp() {
                     }}
                   />
                   {!password && isSubmitted ? (
-                    <p style={alert}>Password is required </p>
+                    <p style={alertStyle}>Password is required </p>
                   ) : (
                     ""
                   )}

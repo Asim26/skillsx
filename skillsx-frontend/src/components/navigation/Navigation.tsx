@@ -16,6 +16,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 
 import SchoolIcon from "@material-ui/icons/School";
+import CategoryIcon from '@material-ui/icons/Category';
 import "./Navigation.css";
 import { Link , useHistory } from "react-router-dom";
 import { loginAccess } from "../../cache";
@@ -146,30 +147,22 @@ export default function Navigation() {
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    >
-      {/* <MenuItem>
-          <IconButton aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton aria-label="show 11 new notifications" color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem> */}
+      >
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
+        <IconButton aria-label="Courses" color="inherit">
           <Badge color="secondary">
             <SchoolIcon />
           </Badge>
         </IconButton>
-        <p>Courses</p>
+        <Link to="/Courses" style={{textDecoration:"none", color:"black"}}><p>Courses</p></Link>
+      </MenuItem>
+      <MenuItem>
+        <IconButton aria-label="Catagory" color="inherit">
+          <Badge color="secondary">
+            <CategoryIcon />
+          </Badge>
+        </IconButton>
+        <Link to="/Categories" style={{textDecoration:"none", color:"black"}}><p>Catagories</p></Link>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -180,7 +173,7 @@ export default function Navigation() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <Link to="/Profile" style={{textDecoration:"none", color:"black"}}><p >Profile</p></Link>
       </MenuItem>
     </Menu>
   );
@@ -189,14 +182,6 @@ export default function Navigation() {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
             Skills X
           </Typography>
@@ -215,16 +200,6 @@ export default function Navigation() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {/* <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
              <IconButton>
               <Link to="/Categories" className="navLinks">
                 Categories

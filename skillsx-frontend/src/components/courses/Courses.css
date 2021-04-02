@@ -3,6 +3,9 @@
 }
 .courses{
     text-align: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    font-size: xx-large;
 }
 .cards-container{
     margin-left: 2%;

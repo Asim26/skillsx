@@ -61,6 +61,9 @@ export default function Login() {
   const classes = useStyles();
   const history = useHistory();
 
+  //alert style
+  const alertStyle = { color: "red" };
+
   // state Variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -108,9 +111,10 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            <br/>
 
             {
-              onError?<p className="inValidCredentials alertStyle">Invalid Credentials</p> :""
+              onError?<p style={alertStyle}>Invalid Credentials</p> :""
             }
             
             <form onSubmit={loginHandler} className={classes.form} noValidate>
@@ -129,7 +133,7 @@ export default function Login() {
                 }}
               />
               {!email && isSubmitted ? (
-                <p className="alertStyle">Email is required </p>
+                <p style={alertStyle}>Email is required </p>
               ) : (
                 ""
               )}
@@ -148,7 +152,7 @@ export default function Login() {
                 }}
               />
               {!password && isSubmitted ? (
-                <p className="alertStyle">Password is required </p>
+                <p style={alertStyle}>Password is required </p>
               ) : (
                 ""
               )}

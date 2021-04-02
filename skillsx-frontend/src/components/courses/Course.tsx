@@ -10,7 +10,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import {courseId} from "../../cache";
+import {courseId, courseName, courseDescription} from "../../cache";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,18 +36,16 @@ function Course() {
 
         {/* Row 1 start */}
         <Grid item md={6} style={{ textAlign: "justify", textJustify: "inter-word", margin: "auto", padding:"3%"}}>
-          <h1>React Course</h1><br/>
+          <h1> {courseName()}</h1><br/>
           <h3>Course Description</h3><br/>
-          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+            {courseDescription()}
         </Grid>
-        <Grid item md={6} style={{ textAlign: "center", margin: "auto"}}>
-          <CardMedia
+        <Grid item md={6} >
+          <CardMedia style={{width:"80%", height:"95%" ,float:"right"}}
                 component="img"
-                alt="Contemplative Reptile"
-                height="20%"
+                alt="Course Image"
                 image="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg"
                 title="Course Name"
-                width="20%"
             />
         </Grid>
         {/* Row 1 End */}

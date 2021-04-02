@@ -57,19 +57,19 @@ function Categories() {
       <Navigation />
       {
         onError?<p className="alertStyle">Could Not Fetch Categories</p> :
-      
-      <Paper className={classes.root}>
+      <div className="main-container">
+        <h2 className="categories-heading">Categories</h2>
+      <Paper className={classes.root} >
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
 
-                <TableCell>Title</TableCell>
+                <TableCell className="tableHeading">Title</TableCell>
 
-                <TableCell>Description</TableCell>
+                <TableCell className="tableHeading">Description</TableCell>
 
-                <TableCell>Active</TableCell>
+                <TableCell className="tableHeading">Active</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -83,7 +83,6 @@ function Categories() {
                       tabIndex={-1}
                       key={category._id}
                     >
-                      <TableCell key={category._id}>{category._id}</TableCell>
                       <TableCell key={category._id}>{category.title}</TableCell>
                       <TableCell key={category._id}>
                         {category.description}
@@ -107,6 +106,8 @@ function Categories() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      </div>
+
       }
     </div>
   );

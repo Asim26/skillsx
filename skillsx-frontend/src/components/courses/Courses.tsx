@@ -11,9 +11,10 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import Navigation from "../navigation/Navigation";
-import { courseId } from "../../cache";
+import { courseId, courseName,courseDescription } from "../../cache";
 import "./Courses.css";
 import { useHistory } from "react-router-dom";
+import { IMG_URL } from "../../utilities/Constants";
 
 const useStyles = makeStyles({
   root: {
@@ -28,43 +29,43 @@ export default function Courses() {
 
  const courses= [
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":1,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":2,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":3,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":4,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":5,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id":6,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     },
     {
-      "courseName": "react",
+      "courseName": "React",
       "id": 7,
       "courseTitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "courseDescription": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
@@ -72,9 +73,11 @@ export default function Courses() {
    
   ];
 
-  const showCardDetail = (id:any) =>{
-   courseId(id);
-   history.push("/Course", courseId);
+  const courseDetails =(id:any, name:any, description:any) =>{
+    courseId(id);
+    courseName(name)
+    courseDescription(description)
+    history.push("/Course", courseId());
   }
 
   return (   
@@ -87,17 +90,17 @@ export default function Courses() {
       <Grid container spacing={2} >
       {courses.map((course) => (
         <Grid item md={3} onClick={()=>{
-          showCardDetail(course.id)
+          courseDetails(course.id, course.courseName, course.courseDescription)
         }}>
           
           <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="Contemplative Reptile"
+                alt="Course Image"
                 height="140"
-                image="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg"
-                title="Contemplative Reptile"
+                image={IMG_URL}
+                title="Course Image"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -109,11 +112,8 @@ export default function Courses() {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-              <Button size="small" color="primary">
-                Learn More
+              <Button size="small" color="primary" onClick={()=>{alert('hello there !')}}>
+                Request this Course
               </Button>
             </CardActions>
           </Card>

@@ -1,0 +1,1 @@
+export const IMG_URL="https://courseshunter.com/media/images/hello-react-react-training-for-javascript-beginners.jpg";

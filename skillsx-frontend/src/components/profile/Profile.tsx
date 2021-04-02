@@ -55,6 +55,9 @@ export default function Profile() {
   const classes = useStyles();
   const history = useHistory();
 
+   //alert style
+   const alertStyle = { color: "red", marginTop: "2%" };
+
   //fetching records based on current logged in user id 
   const id = userId();
 
@@ -72,17 +75,31 @@ export default function Profile() {
   });
 
   // state Variables
-  const [firstName, setFirstName] = useState(data && data.findUserByID.firstName);
-  const [lastName, setLastName] = useState(data && data.findUserByID.lastName);
-  const [email, setEmail] = useState(data && data.findUserByID.email);
-  const [phoneNumber, setPhoneNumber] = useState(data && data.findUserByID.phoneNo);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("1234");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
+
+  
+  useEffect(()=>{
+    setFirstName(data && data.findUserByID.firstName)
+    setLastName(data && data.findUserByID.lastName)
+    setEmail(data && data.findUserByID.email)
+    setPhoneNumber(data && data.findUserByID.phoneNo)
+  },[data])
+
+  
   
   //call mutation for updating the data
   const [updateProfile] = useMutation(updateUser,{
     onError: (e) => {
     setOnMutationError(true);
+   },
+   onCompleted: (e) => {
+    setUpdatedSuccessfully(true);
    }
   });
 
@@ -107,6 +124,13 @@ export default function Profile() {
     });
 
   };
+
+  const reset = () =>{
+    setFirstName(data && data.findUserByID.firstName)
+    setLastName(data && data.findUserByID.lastName)
+    setEmail(data && data.findUserByID.email)
+    setPhoneNumber(data && data.findUserByID.phoneNo)
+  }
     
   return (
     <div>
@@ -121,14 +145,17 @@ export default function Profile() {
             <Typography component="h1" variant="h5">
               Profile
             </Typography>
-            <br />
             {
-              onQueryError?<p className="alertStyle">unable to fetch data</p> :""
+              updatedSuccessfully?<p style={{color:"green"}}>Details Updated Successfully</p> :""
+            }
+            <br/>
+            {
+              onQueryError?<p style={alertStyle}>Unable To Fetch Data</p> :""
             }
             {
-              onMutationError?<p className="alertStyle">unable to update the data</p> :""
+              onMutationError?<p style={alertStyle}>Unable To Update The Data</p> :""
             }
-            
+            <br/>            
             <form
               onSubmit={updateUserDetailsHandler}
               className={classes.form}
@@ -145,14 +172,14 @@ export default function Profile() {
                     fullWidth
                     id="firstName"
                     defaultValue={firstName}
-
+                    value={firstName && firstName}
                     autoFocus
                     onChange={(e: any) => {
                       setFirstName(e.target.value);
                     }}
                   />
                   {!firstName && isSubmitted ? (
-                    <p className="alertStyle">First Name is required </p>
+                    <p style={alertStyle}>First Name is required </p>
                   ) : (
                     ""
                   )}
@@ -166,6 +193,7 @@ export default function Profile() {
                     fullWidth
                     id="lastName"
                     defaultValue={lastName}
+                    value={lastName && lastName}
                     name="lastName"
                     autoComplete="lname"
                     onChange={(e: any) => {
@@ -173,7 +201,7 @@ export default function Profile() {
                     }}
                   />
                   {!lastName && isSubmitted ? (
-                    <p className="alertStyle">Last Name is required </p>
+                    <p style={alertStyle}>Last Name is required </p>
                   ) : (
                     ""
                   )}
@@ -187,6 +215,7 @@ export default function Profile() {
                     fullWidth
                     id="email"                    
                     defaultValue={email}
+                    value={email && email}
                     name="email"
                     autoComplete="email"
                     onChange={(e: any) => {
@@ -194,7 +223,7 @@ export default function Profile() {
                     }}
                   />
                   {!email && isSubmitted ? (
-                    <p className="alertStyle">Email is required </p>
+                    <p style={alertStyle}>Email is required </p>
                   ) : (
                     ""
                   )}
@@ -209,6 +238,7 @@ export default function Profile() {
                     name="Phone_number"
                     type="text"
                     defaultValue={phoneNumber}
+                    value={phoneNumber && phoneNumber}
                     id="Phone_number"
                     autoComplete="off"
                     onChange={(e: any) => {
@@ -216,7 +246,7 @@ export default function Profile() {
                     }}
                   />
                   {!phoneNumber && isSubmitted ? (
-                    <p className="alertStyle">Phone Number is required </p>
+                    <p style={alertStyle}>Phone Number is required </p>
                   ) : (
                     ""
                   )}
@@ -236,11 +266,11 @@ export default function Profile() {
 
                 <Grid item xs={6}>
                   <Button
-                    type="submit"
                     fullWidth
                     variant="contained"
                     color="secondary"
                     className={classes.cancel}
+                    onClick={()=>{reset()}}
                   >
                     Reset
                   </Button>
