@@ -6,11 +6,12 @@ import { createConnection } from "typeorm";
 import { UserResolver } from "./resolvers/UserResolver";
 import { AdminResolver } from "./resolvers/AdminResolver";
 import { CategoryResolver } from "./resolvers/CategoryResolver";
+import { CourseResolver } from "./resolvers/CourseResolver";
 
 const startServer = async () => {
   await createConnection();
   const schema = await buildSchema({
-    resolvers: [UserResolver, AdminResolver, CategoryResolver],
+    resolvers: [UserResolver, AdminResolver, CategoryResolver, CourseResolver],
   });
   const port = 4002;
   const app = Express();

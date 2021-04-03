@@ -7,7 +7,7 @@ import { adminAuth } from "../authentication/auth";
 export class CategoryResolver {
   //fetch all Categories
   @Query(() => [Category])
- // @UseMiddleware(adminAuth)
+  //@UseMiddleware(adminAuth)
   async fetchCategories(): Promise<Category[]> {
     return await Category.find();
   }
@@ -57,7 +57,7 @@ export class CategoryResolver {
     return await Category.findOne({ where: { title } });
   }
 
-  //delete Category byid
+  // delete Category byid
   @Mutation(() => Category!, { nullable: true })
   @UseMiddleware(adminAuth)
   async deleteCategoryByID(

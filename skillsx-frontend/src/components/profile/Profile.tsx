@@ -3,25 +3,19 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { useHistory } from "react-router-dom";
-
 import { userId } from "../../cache";
-
 import "./Profile.css";
 import Navigation from "../navigation/Navigation";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { findUserByID, updateUser, allUsers } from "../../queries/mutations";
+import { findUserByID, updateUser } from "../../queries/mutations";
+
+import Footer from "../footer/Footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile() {
   const classes = useStyles();
-  const history = useHistory();
 
    //alert style
    const alertStyle = { color: "red", marginTop: "2%" };
@@ -81,7 +74,7 @@ export default function Profile() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("1234");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [updatedSuccessfully, setUpdatedSuccessfully] = useState(false);
+  const [updatedSuccessfully, setUpdatedSuccessfully] = useState(123);
 
   
   useEffect(()=>{
@@ -99,7 +92,7 @@ export default function Profile() {
     setOnMutationError(true);
    },
    onCompleted: (e) => {
-    setUpdatedSuccessfully(true);
+    setUpdatedSuccessfully(1);
    }
   });
 
@@ -146,7 +139,7 @@ export default function Profile() {
               Profile
             </Typography>
             {
-              updatedSuccessfully?<p style={{color:"green"}}>Details Updated Successfully</p> :""
+              updatedSuccessfully === 1 && isSubmitted ?<p style={{color:"green"}}>Details Updated Successfully</p> :""
             }
             <br/>
             {
@@ -259,8 +252,9 @@ export default function Profile() {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    onClick={updateUserDetailsHandler}
                   >
-                    Save
+                    {loading?"Updating...":"Update"}
                   </Button>
                 </Grid>
 
@@ -277,20 +271,7 @@ export default function Profile() {
                 </Grid>
               </Grid>
 
-              <Box mt={5}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  align="center"
-                >
-                  {"Copyright © "}
-                  <Link color="inherit" href="#">
-                    SkillsX
-                  </Link>{" "}
-                  {new Date().getFullYear()}
-                  {"."}
-                </Typography>
-              </Box>
+              <Footer />
             </form>
           </div>
         </Grid>

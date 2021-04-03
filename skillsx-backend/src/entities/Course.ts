@@ -1,23 +1,22 @@
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, } from "type-graphql";
 import {
   Entity,
   BaseEntity,
   ObjectIdColumn,
   Column,
   ObjectID,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
 
+import { CourseParts } from "./CourseParts"
 @ObjectType()
 @Entity()
 export class Course extends BaseEntity {
   @Field(() => ID)
   @ObjectIdColumn()
   _id: ObjectID;
-
-  @Field()
-  imageUrl: string;
 
   @Field()
   @Column()
@@ -51,17 +50,10 @@ export class Course extends BaseEntity {
   @Column()
   categoryId: string;
 
-  // @Field()
-  // @Column()
-  // courseParts: [
-  //   {
-  //     title: string;
-  //     description: string;
-  //     outline: string;
-  //     isActive: boolean;
-  //     isDeleted: boolean;
-  //     createdAt: Date;
-  //     updatedAt: Date;
-  //   }
-  // ];
+  @Field(() => [CourseParts], { nullable: true })
+  @OneToMany(() => CourseParts, coursePart => coursePart.course,
+    { cascade: true }
+  )
+  coursePart: CourseParts[];
+
 }

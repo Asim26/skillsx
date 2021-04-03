@@ -17,6 +17,7 @@ import { registerUser } from "../../queries/mutations";
 import { useMutation } from "@apollo/client";
 
 import "./SignUp.css";
+import Footer from "../footer/Footer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +65,10 @@ export default function SignUp() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [onError, setOnError] = useState(false);
 
-  const [phoneValidation, setPhoneValidation] = useState(false);
+  // state Variables for validation
+  const [phoneValidation, setPhoneValidation] = useState(123);
+  const [emailValidation, setEmailValidation] = useState(123);
+  const [passwordValidation, setPasswordValidation] = useState(123);
 
   //Executing SignUp Mutation
   const [signUpUser, { data, loading, error }] = useMutation(registerUser,{
@@ -79,18 +83,46 @@ export default function SignUp() {
   //  functions
   const signUpHandler = (e: any) => {
     e.preventDefault();
-    setIsSubmitted(true);
 
-    // var phoneNumber1 = phoneNumber;
+    //email validation using RegX
+    var emailRGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var emailResult = emailRGEX.test(email);
+
+    if(email){      
+      if(emailResult === false){
+        setEmailValidation(0)
+      }
+      else{
+        setEmailValidation(1)
+      }
+    }
+    
+    //phone Number validation using RegX
     var phoneRGEX = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/g;
     var phoneResult = phoneRGEX.test(phoneNumber);
+   
+    if(phoneNumber){
+      if(phoneResult === false)
+      {
+        setPhoneValidation(0)     
+      }
+      else{
+        setPhoneValidation(1)
+      }
+    }
+    
+    //password Validation
+    if(password){
+      if(isSubmitted && password.length<=6){
+        setPasswordValidation(0)
+      }
+      else{
+        setPasswordValidation(1)
+      }
+    }
+   
 
-    if(phoneResult){
-      setPhoneValidation(true)
-    }
-    else{
-      setPhoneValidation(false)
-    }
+    setIsSubmitted(true);
 
     signUpUser({
       variables: {
@@ -184,6 +216,10 @@ export default function SignUp() {
                   ) : (
                     ""
                   )}
+
+                  {
+                    emailValidation === 0 && isSubmitted ?<p style={{color:"red"}}> Invalid Email</p>:""
+                  }
                 </Grid>
 
                 <Grid item xs={12}>
@@ -205,9 +241,11 @@ export default function SignUp() {
                   ) : (
                     ""
                   )}
+
                   {
-                    phoneValidation?"":<p style={{color:"red"}}>Invalid Number</p>
+                    phoneValidation === 0 && isSubmitted ?<p style={{color:"red"}}>Invalid Number</p>:""
                   }
+
                 </Grid>
 
                 <Grid item xs={12}>
@@ -229,6 +267,11 @@ export default function SignUp() {
                   ) : (
                     ""
                   )}
+                  
+                  {
+                    passwordValidation === 0 && isSubmitted ?<p style={{color:"red"}}> Weak Password</p> :""
+                  }
+
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
@@ -258,20 +301,7 @@ export default function SignUp() {
                 </Grid>
               </Grid>
 
-              <Box mt={5}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  align="center"
-                >
-                  {"Copyright © "}
-                  <Link color="inherit" href="#">
-                    SkillsX
-                  </Link>{" "}
-                  {new Date().getFullYear()}
-                  {"."}
-                </Typography>
-              </Box>
+              <Footer/>
             </form>
           </div>
         </Grid>

@@ -85,3 +85,23 @@ export const fetchCategories = gql`
     }
   }
 `
+
+//fetchAllCourses
+export const fetchCourses = gql`
+  query fetchCourses {
+    fetchCourses{
+    _id
+    title
+    description
+    isActive
+    isDeleted
+    outline
+    createdAt
+    updatedAt
+    coursePart{
+      title
+      description
+    }
+  }
+}
+`

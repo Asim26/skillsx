@@ -1,0 +1,164 @@
+// create course api
+
+mutation{
+  createCourse(
+    data:{
+      title: "react"
+      description:"This is the first course"
+      outline: "React with advanced feature"
+      isActive: true
+      isDeleted: false
+      categoryId: "605c7c5cd8a225255c6cada4"
+      coursePart: [
+        {
+          title: "test"
+          description: "test"
+          outline: "test"
+          isActive: true
+          isDeleted: true
+        }
+        {
+          title: "test1"
+          description: "test1"
+          outline: "test1"
+          isActive: true
+          isDeleted: true
+        }
+      ]
+    }
+  ){
+    _id
+    title
+    description
+    outline
+    isDeleted
+    categoryId
+    coursePart{
+      _id
+      title
+      description
+      outline
+      isActive
+      isDeleted
+    }
+  }
+}
+
+// response for createcourse api
+{
+  "data": {
+    "createCourse": {
+      "_id": "6065d274d7104520ad2d1c05",
+      "title": "react",
+      "description": "This is the first course",
+      "outline": "React with advanced feature",
+      "isDeleted": false,
+      "categoryId": "605c7c5cd8a225255c6cada4",
+      "coursePart": [
+        {
+          "_id": "6065d274d7104520ad2d1c06",
+          "title": "test",
+          "description": "test",
+          "outline": "test",
+          "isActive": true,
+          "isDeleted": true
+        },
+        {
+          "_id": "6065d275d7104520ad2d1c07",
+          "title": "test1",
+          "description": "test1",
+          "outline": "test1",
+          "isActive": true,
+          "isDeleted": true
+        }
+      ]
+    }
+  }
+}
+
+
+// Delete API 
+
+mutation{
+  deleteCourseByID(_id:"6065c2e3c126c31f29e55ced"){
+    title
+    isDeleted
+  }
+}
+
+// Update Request 
+
+
+mutation{
+  updateCourse(
+    _id:"6065d274d7104520ad2d1c05"
+    data:{
+      title: "Angular"
+      description:"This is the second course"
+      outline: "Angular with advanced feature"
+      isActive: true
+      isDeleted: false
+      categoryId: "605c80e9d8a225255c6cada5"
+      coursePart: [
+        {
+          title: "Angular test 1"
+          description: "Angular test 1"
+          outline: "test 1"
+          isActive: true
+          isDeleted: false
+        }
+        {
+          title: "Angular_test_1"
+          description: "Anguar_test1"
+          outline: "test1"
+          isActive: true
+          isDeleted: false
+        }
+      ]
+    }
+  ){
+    _id
+    title
+    description
+    outline
+    isDeleted
+    categoryId
+    coursePart{
+      _id
+      title
+      description
+      outline
+      isActive
+      isDeleted
+    }
+  }
+}
+
+// Fetch Courses 
+
+query{
+  fetchCourses{
+    _id
+    title
+    isActive
+    isDeleted
+    description
+    coursePart{
+       _id
+      title
+      description
+      outline
+      isActive
+      isDeleted
+    }
+
+  }
+}
+
+query{
+  findCourseByID(_id:"6065c2e3c126c31f29e55ced"){
+    title
+    isDeleted
+    description
+  }
+}

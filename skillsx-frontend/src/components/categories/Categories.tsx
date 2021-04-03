@@ -16,6 +16,8 @@ import TableRow from "@material-ui/core/TableRow";
 
 import "./Categories.css";
 
+import Footer from "../footer/Footer";
+
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -109,6 +111,7 @@ function Categories() {
       </div>
 
       }
+      <Footer />
     </div>
   );
 }

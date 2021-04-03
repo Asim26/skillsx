@@ -7,7 +7,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
@@ -17,10 +16,8 @@ import { loginUser } from "../../queries/mutations";
 import { useMutation } from "@apollo/client";
 
 import { useHistory } from "react-router-dom";
-
-import { loginAccess, userAccessToken } from "../../cache";
-import { userId } from "../../cache";
-
+import { loginAccess, userAccessToken, userId } from "../../cache";
+import Footer from "../footer/Footer";
 import "./Login.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +93,6 @@ export default function Login() {
     userId(data.loginUser._id);
     userAccessToken("Bearer ".concat(data.loginUser.accessToken));
   }
-
 
   return (
     <div>
@@ -185,20 +181,7 @@ export default function Login() {
                   </Link>
                 </Grid>
               </Grid>
-              <Box mt={5}>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  align="center"
-                >
-                  {"Copyright © "}
-                  <Link color="inherit" href="#">
-                    SkillsX
-                  </Link>{" "}
-                  {new Date().getFullYear()}
-                  {"."}
-                </Typography>
-              </Box>
+              <Footer/>
             </form>
           </div>
         </Grid>
